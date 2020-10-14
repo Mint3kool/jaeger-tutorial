@@ -16,7 +16,7 @@ public class TutorialApplication {
     public static void main(String[] args) {
 
         ApplicationContext context = SpringApplication.run(TutorialApplication.class, args);
-        log.info("TutorialApplication started");
+//        log.info("TutorialApplication started");
 
         TutorialController commandController = context.getBean(TutorialController.class);
         commandController.init();

@@ -33,30 +33,18 @@ public class TutorialController {
     public void init() {
 
         // Add some employees
-        employeeService.addEmployee(Employee.builder()
-                .employeeId(1)
-                .email("john@doe.com")
-                .firstName("John")
-                .lastName("Doe")
-                .phone("555-1212")
-                .build());
-
-        employeeService.addEmployee(Employee.builder()
-                .employeeId(2)
-                .email("jenny@doe.com")
-                .firstName("Jenny")
-                .lastName("Doe")
-                .phone("867-5309")
-                .build());
-
-        employeeService.addEmployee(Employee.builder()
-                .employeeId(3)
-                .email("clark@doe.com")
-                .firstName("Clark")
-                .lastName("Kent")
-                .phone("555-1213")
-                .build());
-
+        employeeService.addEmployee(new Employee() {{
+            setEmployeeId(1);
+            setEmail("j@j.com");
+        }});
+        employeeService.addEmployee(new Employee() {{
+            setEmployeeId(2);
+            setEmail("a@a.com");
+        }});
+        employeeService.addEmployee(new Employee() {{
+            setEmployeeId(3);
+            setEmail("b@b.com");
+        }});
     }
 
 
@@ -68,7 +56,7 @@ public class TutorialController {
 
         HttpStatus status = HttpStatus.FORBIDDEN;
 
-        log.info("Receive Request to add employee {}", employee);
+//        log.info("Receive Request to add employee {}", employee);
         if (employeeService.addEmployee(employee)) {
             status = HttpStatus.CREATED;
             span.setTag("http.status_code", 201);
@@ -91,14 +79,14 @@ public class TutorialController {
 
         try {
             int id = Integer.parseInt(idString);
-            log.info("Received Request for employee {}", id);
+//            log.info("Received Request for employee {}", id);
             employee = employeeService.getEmployee(id)
                     .orElseThrow(() -> new NoSuchElementException("Employee not found."));
 
             status = HttpStatus.OK;
 
         } catch (NumberFormatException | NoSuchElementException nfe) {
-            log.error("Error getting employee: ", nfe);
+//            log.error("Error getting employee: ", nfe);
         }
         span.finish();
         return new ResponseEntity<>(employee, status );
@@ -111,7 +99,7 @@ public class TutorialController {
 
         Span span = tracer.buildSpan("get employees").start();
 
-        log.info("Receive Request to Get All Employees");
+//        log.info("Receive Request to Get All Employees");
         Collection<Employee> employees = employeeService.loadAllEmployees();
 
         span.finish();
@@ -130,7 +118,7 @@ public class TutorialController {
 
         try {
             int id = Integer.parseInt(idString);
-            log.info("Received Request to update employee {}", id);
+//            log.info("Received Request to update employee {}", id);
 
             if (employeeService.updateEmployee(id, employee)) {
                status = HttpStatus.OK;
@@ -152,7 +140,7 @@ public class TutorialController {
 
         try {
             int id = Integer.parseInt(idString);
-            log.info("Received Request to patch employee {}", id);
+//            log.info("Received Request to patch employee {}", id);
 
             if (employeeService.patchEmployee(id, employee)) {
                 return new ResponseEntity(null, HttpStatus.OK);
@@ -175,7 +163,7 @@ public class TutorialController {
 
         try {
             int id = Integer.parseInt(idString);
-            log.info("Received Request to delete employee {}", id);
+//            log.info("Received Request to delete employee {}", id);
             span.log(ImmutableMap.of("event", "delete-request", "value", idString));
             if (employeeService.deleteEmployee(id, span)) {
                 span.log(ImmutableMap.of("event", "delete-success", "value", idString));
