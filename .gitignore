@@ -9,3 +9,6 @@ out
 gen
 .gradle/
 build
+bin/
+gradle/
+local/
